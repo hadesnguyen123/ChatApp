@@ -21,18 +21,6 @@ const io = socketio(httpServer)
 io.on("connection", (socket) => {
     console.log("new client connect")
 
-    let count = 1
-    const message = "Hello World"
-    //truyền từ server về client
-    socket.emit("send count server to client", count)
-    socket.emit("send message server to client", message)
-
-    //nhận sự kiện từ client tới server
-    socket.on("send increment client to server", () => {
-        count++
-        socket.emit("send count server to client", count)
-    })
-
     //ngắt kết nối, mỗi client là 1 socket
     socket.on("disconnect", () => {
         console.log("client left server")
