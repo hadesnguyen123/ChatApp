@@ -4,25 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat App</title>
+    <title>Room Chat</title>
 </head>
 
 <body>
-    <main>
-        <h1>Chat App</h1>
-        <form id="form-message">
-            <input type="text" id="input-message" />
-            <button type="submit">Send</button>
-            <button type="button" id="btn-share-location">
-                Share Location
-            </button>
-        </form>
-
-    </main>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="js/client-chat.js">
-        // yêu cầu kết nối từ server với client
-    </script>
+    <h1>Room chat</h1>
+    <form action="/chat-room.html">
+        <h1>Join</h1>
+        <input type="text" name="room" placeholder="room">
+        <input type="text" name="username" placeholder="username">
+        <button type="submit">Join</button>
+    </form>
+ 
 </body>
 
 </html>
