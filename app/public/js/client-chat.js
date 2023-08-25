@@ -17,3 +17,19 @@ document.getElementById("form-message").addEventListener("submit", (e) => {
 socket.on("send message from server to client", (messageText) => {
     console.log("messageText:", messageText)
 })
+
+document.getElementById("btn-share-location").addEventListener("click", () => {
+    if (!navigator.geolocation) {
+        return alert("Brower not support or cannot find your location")
+    } else {
+        navigator.geolocation.getCurrentPosition((position) => {
+            console.log(position)
+            const { latitude, longitude } = position.coords
+            socket.emit("Share location from client to server", { latitude, longitude })
+        })
+    }
+})
+
+socket.on("Share location from server to client", (linkLocation) => {
+    console.log(linkLocation)
+})

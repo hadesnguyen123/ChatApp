@@ -22,13 +22,26 @@ const io = socketio(httpServer)
 //lắng nghe sự kiện kết nối từ client
 io.on("connection", (socket) => {
     console.log("new client connect")
+    //gửi cho client vừa connect
+    socket.emit("send message from server to client", "Welcome to Chat App")
+
+    //gửi cho client còn lại
+    socket.broadcast.emit("send message from server to client", "Have new client join message")
+
+    //chat
     socket.on("send message from client to server", (messageText, callback) => {
         const filter = new Filter()
         if (filter.isProfane(messageText)) {
-           return callback("messageText is profane") //tục tĩu
+            return callback("messageText is profane") //tục tĩu
         }
         io.emit("send message from server to client", messageText)
         callback()   //khi server gọi callback thì acknowledgements sẽ đc gọi lại
+    })
+
+    //Chia sẻ location
+    socket.on("Share location from client to server", ({ latitude, longitude }) => {
+        const linkLocation = `https://www.google.com/maps?q=${latitude},${longitude}`
+        io.emit("Share location from server to client",linkLocation)
     })
 
     //ngắt kết nối, mỗi client là 1 socket
