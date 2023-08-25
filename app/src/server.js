@@ -4,6 +4,8 @@ const app = express()
 const http = require('http');
 const socketio = require('socket.io');
 const { Server } = require('socket.io');
+const Filter = require('bad-words');
+
 const { count } = require('console');
 const port = 8080
 
@@ -20,6 +22,14 @@ const io = socketio(httpServer)
 //lắng nghe sự kiện kết nối từ client
 io.on("connection", (socket) => {
     console.log("new client connect")
+    socket.on("send message from client to server", (messageText, callback) => {
+        const filter = new Filter()
+        if (filter.isProfane(messageText)) {
+           return callback("messageText is profane") //tục tĩu
+        }
+        io.emit("send message from server to client", messageText)
+        callback()   //khi server gọi callback thì acknowledgements sẽ đc gọi lại
+    })
 
     //ngắt kết nối, mỗi client là 1 socket
     socket.on("disconnect", () => {
