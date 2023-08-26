@@ -9,7 +9,6 @@ const formatTime = require('date-format');
 const { createMessage } = require('./utils/create-message');
 const { getUserList, addUser, removeUser, getUser } = require('./utils/users');
 
-const port = 8080
 const messageServer = "send message from server to client"
 const messageClient = "send message from client to server"
 
@@ -83,7 +82,7 @@ io.on("connection", (socket) => {
     })
 })
 
-
+const port = process.env.PORT || 8080
 httpServer.listen(port, (req, res) => {
     console.log(`App listen at port http://localhost:${port}`)
 })
