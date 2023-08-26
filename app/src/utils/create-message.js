@@ -1,9 +1,11 @@
 const formatTime = require('date-format');
 
-const createMessage = (messageText) => {
+const createMessage = (messageText, username,id) => {
     return {
         messageText,
-        createAt: formatTime('dd/MM/yyyy - hh:mm:ss', new Date())
+        createAt: formatTime('dd/MM/yyyy - hh:mm:ss', new Date()),
+        username,
+        id
     }
 }
 

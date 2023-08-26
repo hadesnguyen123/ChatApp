@@ -23,8 +23,11 @@ const removeUser = (id) => userList = userList.filter(user => user.id !== id)
 
 const getUserList = (room) => userList.filter(user => user.room == room)
 
+const getUser = (id) => userList.find(user => user.id === id)
+
 module.exports = {
     getUserList,
     addUser,
-    removeUser
+    removeUser,
+    getUser
 }

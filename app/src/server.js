@@ -7,7 +7,7 @@ const { Server } = require('socket.io');
 const Filter = require('bad-words');
 const formatTime = require('date-format');
 const { createMessage } = require('./utils/create-message');
-const { getUserList, addUser, removeUser } = require('./utils/users');
+const { getUserList, addUser, removeUser, getUser } = require('./utils/users');
 
 const port = 8080
 const messageServer = "send message from server to client"
@@ -35,12 +35,12 @@ io.on("connection", (socket) => {
         //gửi cho client vừa connect
         socket.emit(
             messageServer,
-            createMessage(`Welcome ${username} to Chat App, room: ${room}`))
+            createMessage(`Welcome ${username} to Chat App, room: ${room}`, 'Admin', ''))
 
         //gửi cho client còn lại
         socket.broadcast.to(room).emit(
             messageServer,
-            createMessage(`Client ${username} were join chat room: ${room}`))
+            createMessage(`Client ${username} were join chat room: ${room}`, 'Admin', ''))
 
         //chat
         socket.on(messageClient, (messageText, callback) => {
@@ -48,17 +48,22 @@ io.on("connection", (socket) => {
             if (filter.isProfane(messageText)) {
                 return callback("messageText is profane") //tục tĩu
             }
+            const id = socket.id
+            console.log(id)
+            const user = getUser(id)
+
             io.to(room).emit(
                 messageServer,
-                createMessage(messageText))
-
+                createMessage(messageText, user.username, id))
             callback()   //khi server gọi callback thì acknowledgements sẽ đc gọi lại
         })
 
         //chia sẻ location
         socket.on("Share location from client to server", ({ latitude, longitude }) => {
+            const id = socket.id
+            const user = getUser(id)
             const linkLocation = `https://www.google.com/maps?q=${latitude},${longitude}`
-            io.emit("Share location from server to client", linkLocation)
+            io.emit("Share location from server to client", createMessage(linkLocation, user.username))
         })
 
         //userList
